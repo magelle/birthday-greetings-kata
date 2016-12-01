@@ -4,6 +4,8 @@ import com.dumbster.smtp.SimpleSmtpServer;
 import com.dumbster.smtp.SmtpMessage;
 import it.xpug.kata.birthdaygreetings.birthday.BirthdayGreetings;
 import it.xpug.kata.birthdaygreetings.birthday.Birthdate;
+import it.xpug.kata.birthdaygreetings.failure.FailureHandler;
+import it.xpug.kata.birthdaygreetings.failure.MessageFailureHandler;
 import it.xpug.kata.birthdaygreetings.message.MailMessageService;
 import it.xpug.kata.birthdaygreetings.message.mail.MailService;
 import it.xpug.kata.birthdaygreetings.repository.EmployeeFileRepository;
@@ -22,6 +24,7 @@ public class AcceptanceTest {
 	private EmployeeFileRepository employeeCatalog;
 	private MailMessageService birthdayGreetingsMailService;
 	private MailService mailService;
+	private FailureHandler failureHandler;
 
 	@Before
 	public void setUp() throws Exception {
@@ -29,7 +32,8 @@ public class AcceptanceTest {
 		employeeCatalog = new EmployeeFileRepository("employee_data.txt");
 		mailService = new MailService("localhost", NONSTANDARD_PORT);
 		birthdayGreetingsMailService = new MailMessageService(mailService);
-		birthdayGreetings = new BirthdayGreetings(birthdayGreetingsMailService);
+		failureHandler = new MessageFailureHandler(birthdayGreetingsMailService);
+		birthdayGreetings = new BirthdayGreetings(birthdayGreetingsMailService, failureHandler);
 	}
 
 	@After
