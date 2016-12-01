@@ -3,7 +3,7 @@ package it.xpug.kata.birthdaygreetings;
 import com.dumbster.smtp.SimpleSmtpServer;
 import com.dumbster.smtp.SmtpMessage;
 import it.xpug.kata.birthdaygreetings.birthday.BirthdayGreetings;
-import it.xpug.kata.birthdaygreetings.birthday.MonthDayDate;
+import it.xpug.kata.birthdaygreetings.birthday.Birthdate;
 import it.xpug.kata.birthdaygreetings.message.MailMessageService;
 import it.xpug.kata.birthdaygreetings.message.mail.MailService;
 import it.xpug.kata.birthdaygreetings.repository.EmployeeFileRepository;
@@ -29,7 +29,7 @@ public class AcceptanceTest {
 		employeeCatalog = new EmployeeFileRepository("employee_data.txt");
 		mailService = new MailService("localhost", NONSTANDARD_PORT);
 		birthdayGreetingsMailService = new MailMessageService(mailService);
-		birthdayGreetings = new BirthdayGreetings(employeeCatalog, birthdayGreetingsMailService);
+		birthdayGreetings = new BirthdayGreetings(birthdayGreetingsMailService);
 	}
 
 	@After
@@ -41,7 +41,7 @@ public class AcceptanceTest {
 	@Test
 	public void willSendGreetings_whenItsSomebodysBirthday() throws Exception {
 
-		birthdayGreetings.sendGreetings(new MonthDayDate("2008/10/08"));
+		birthdayGreetings.sendGreetings(employeeCatalog, new Birthdate("2008/10/08"));
 
 		assertEquals("message not sent?", 1, mailServer.getReceivedEmailSize());
 		SmtpMessage message = (SmtpMessage) mailServer.getReceivedEmail().next();
@@ -54,7 +54,7 @@ public class AcceptanceTest {
 
 	@Test
 	public void willNotSendEmailsWhenNobodysBirthday() throws Exception {
-		birthdayGreetings.sendGreetings(new MonthDayDate("2008/01/01"));
+		birthdayGreetings.sendGreetings(employeeCatalog, new Birthdate("2008/01/01"));
 
 		assertEquals("what? messages?", 0, mailServer.getReceivedEmailSize());
 	}

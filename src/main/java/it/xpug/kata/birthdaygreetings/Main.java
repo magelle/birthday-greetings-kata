@@ -2,7 +2,7 @@ package it.xpug.kata.birthdaygreetings;
 
 import it.xpug.kata.birthdaygreetings.birthday.BirthdayGreetings;
 import it.xpug.kata.birthdaygreetings.birthday.EmployeeCatalog;
-import it.xpug.kata.birthdaygreetings.birthday.MonthDayDate;
+import it.xpug.kata.birthdaygreetings.birthday.Birthdate;
 import it.xpug.kata.birthdaygreetings.message.MailMessageService;
 import it.xpug.kata.birthdaygreetings.message.mail.MailService;
 import it.xpug.kata.birthdaygreetings.repository.EmployeeFileRepository;
@@ -18,8 +18,8 @@ public class Main {
 		MailService mailService = new MailService("localhost", 25);
 		MailMessageService birthdayGreetingsMailService = new MailMessageService(mailService);
 
-		BirthdayGreetings service = new BirthdayGreetings(employeeCatalog, birthdayGreetingsMailService);
-		service.sendGreetings(new MonthDayDate());
+		BirthdayGreetings service = new BirthdayGreetings(birthdayGreetingsMailService);
+		service.sendGreetings(employeeCatalog, new Birthdate());
 	}
 
 }

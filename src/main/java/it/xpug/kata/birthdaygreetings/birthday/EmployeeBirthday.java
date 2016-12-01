@@ -1,7 +1,7 @@
 package it.xpug.kata.birthdaygreetings.birthday;
 
 public interface EmployeeBirthday {
-    boolean isBirthday(MonthDayDate today);
+    boolean isBirthday(Birthdate today);
 
     String getEmail();
 

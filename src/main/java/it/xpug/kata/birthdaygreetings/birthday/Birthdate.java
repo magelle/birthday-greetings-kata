@@ -5,15 +5,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class MonthDayDate {
+public class Birthdate {
 
 	private Date date;
 
-	public MonthDayDate() {
+	public Birthdate() {
 		date = new Date();
 	}
 
-	public MonthDayDate(String yyyyMMdd) throws ParseException {
+	public Birthdate(String yyyyMMdd) throws ParseException {
 		date = new SimpleDateFormat("yyyy/MM/dd").parse(yyyyMMdd);
 	}
 
@@ -25,7 +25,7 @@ public class MonthDayDate {
 		return 1 + getPartOfDate(GregorianCalendar.MONTH);
 	}
 
-	public boolean isSameDay(MonthDayDate anotherDate) {
+	public boolean isSameDay(Birthdate anotherDate) {
 		return anotherDate.getDay() == this.getDay() && anotherDate.getMonth() == this.getMonth();
 	}
 
@@ -36,9 +36,9 @@ public class MonthDayDate {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof MonthDayDate))
+		if (!(obj instanceof Birthdate))
 			return false;
-		MonthDayDate other = (MonthDayDate) obj;
+		Birthdate other = (Birthdate) obj;
 		return other.date.equals(this.date);
 	}
 

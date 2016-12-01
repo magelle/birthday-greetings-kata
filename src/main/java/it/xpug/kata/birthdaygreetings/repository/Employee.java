@@ -1,25 +1,25 @@
 package it.xpug.kata.birthdaygreetings.repository;
 
 import it.xpug.kata.birthdaygreetings.birthday.EmployeeBirthday;
-import it.xpug.kata.birthdaygreetings.birthday.MonthDayDate;
+import it.xpug.kata.birthdaygreetings.birthday.Birthdate;
 
 import java.text.ParseException;
 
 public class Employee implements EmployeeBirthday {
 
-	private MonthDayDate birthDate;
+	private Birthdate birthDate;
 	private String lastName;
 	private String firstName;
 	private String email;
 
-	public Employee(String firstName, String lastName, MonthDayDate birthDate, String email) throws ParseException {
+	public Employee(String firstName, String lastName, Birthdate birthDate, String email) throws ParseException {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.birthDate = birthDate;
 		this.email = email;
 	}
 
-	public boolean isBirthday(MonthDayDate today) {
+	public boolean isBirthday(Birthdate today) {
 		return today.isSameDay(birthDate);
 	}
 
