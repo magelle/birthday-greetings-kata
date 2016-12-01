@@ -1,6 +1,7 @@
 package it.xpug.kata.birthdaygreetings.message;
 
 import it.xpug.kata.birthdaygreetings.birthday.EmployeeBirthday;
+import it.xpug.kata.birthdaygreetings.birthday.Failure;
 import it.xpug.kata.birthdaygreetings.birthday.MessageService;
 import it.xpug.kata.birthdaygreetings.message.mail.MailService;
 
@@ -17,15 +18,19 @@ public class MailMessageService implements MessageService {
         sendMessage(new GreetingsMail(employeeBirthday));
     }
 
-    public void sendMessage(GreetingsMail greetingsMail) {
+    public void sendErrorMessage(String message, Failure failure) {
+        sendMessage(new ErrorMail(message, failure));
+    }
+
+    public void sendMessage(Mail mail) {
         try {
-            sendMessage("sender@here.com", greetingsMail);
+            sendMessage("sender@here.com", mail);
         } catch (MessagingException e) {
             throw new RuntimeException("Error while sending mail", e);
         }
     }
 
-    private void sendMessage(String sender, GreetingsMail greetingsMail) throws MessagingException {
-        mailService.sendMessage(sender, greetingsMail.subject, greetingsMail.body, greetingsMail.recipient);
+    private void sendMessage(String sender, Mail mail) throws MessagingException {
+        mailService.sendMessage(sender, mail.subject, mail.body, mail.recipient);
     }
 }

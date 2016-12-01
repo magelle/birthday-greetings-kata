@@ -2,15 +2,12 @@ package it.xpug.kata.birthdaygreetings.message;
 
 import it.xpug.kata.birthdaygreetings.birthday.EmployeeBirthday;
 
-public class GreetingsMail {
-    final String recipient;
-    final String body;
-    final String subject;
+public class GreetingsMail extends Mail {
 
     GreetingsMail(EmployeeBirthday employeeBirthday) {
-        recipient = employeeBirthday.getEmail();
-        body = "Happy Birthday, dear %NAME%".replace("%NAME%", employeeBirthday.getFirstName());
-        subject = "Happy Birthday!";
+        super(employeeBirthday.getEmail(),
+                "Happy Birthday, dear %NAME%".replace("%NAME%", employeeBirthday.getFirstName()),
+                "Happy Birthday!");
     }
 
 }

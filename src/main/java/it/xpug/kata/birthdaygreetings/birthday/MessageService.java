@@ -1,8 +1,9 @@
 package it.xpug.kata.birthdaygreetings.birthday;
 
-import it.xpug.kata.birthdaygreetings.message.GreetingsMail;
+import it.xpug.kata.birthdaygreetings.message.Mail;
 
 public interface MessageService {
-    void sendMessage(GreetingsMail greetingsMail);
+    void sendMessage(Mail greetingsMail);
+    void sendErrorMessage(String message, Failure failure);
     void sendBirthdayGreetings(EmployeeBirthday employeeBirthday);
 }

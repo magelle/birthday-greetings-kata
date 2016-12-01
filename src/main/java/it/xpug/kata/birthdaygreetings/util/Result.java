@@ -19,7 +19,7 @@ public abstract class Result<V,F> {
     public abstract void ifFailure(Consumer<? super F> consumer);
     public abstract <X extends Throwable> V ifFailureThrow(Supplier<? extends X> exceptionSupplier) throws X;
 
-    abstract Optional<V> recover(Consumer<F> recover);
+    public abstract Optional<V> recover(Consumer<F> recover);
 
     public static <S,F> Result<S,F> success(S value) {
         return new Success<>(value);
@@ -79,7 +79,7 @@ public abstract class Result<V,F> {
         }
 
         @Override
-        Optional<V> recover(Consumer<F> recover) {
+        public Optional<V> recover(Consumer<F> recover) {
             return Optional.of(value);
         }
     }
@@ -134,7 +134,7 @@ public abstract class Result<V,F> {
         }
 
         @Override
-        Optional<V> recover(Consumer<F> recover) {
+        public Optional<V> recover(Consumer<F> recover) {
             recover.accept(failure);
             return Optional.empty();
         }
