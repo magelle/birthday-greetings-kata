@@ -1,55 +1,48 @@
 package it.xpug.kata.birthdaygreetings.repository;
 
-import it.xpug.kata.birthdaygreetings.birthday.EmployeeBirthday;
+import it.xpug.kata.birthdaygreetings.birthday.Employee;
 import it.xpug.kata.birthdaygreetings.birthday.EmployeeCatalog;
-import it.xpug.kata.birthdaygreetings.birthday.Birthdate;
+import it.xpug.kata.birthdaygreetings.birthday.EmployeeFactory;
 import it.xpug.kata.birthdaygreetings.birthday.Failure;
-import it.xpug.kata.birthdaygreetings.message.FileReadingFailure;
 import it.xpug.kata.birthdaygreetings.util.Result;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class EmployeeFileRepository implements EmployeeCatalog {
-    private String fileName;
 
-    public EmployeeFileRepository(String fileName) {
+    private final EmployeeFactory employeeFactory;
+    private final String fileName;
+    private final DateParser dateParser;
+
+    public EmployeeFileRepository(String fileName, EmployeeFactory employeeFactory) {
         this.fileName = fileName;
+        this.employeeFactory = employeeFactory;
+        this.dateParser = new DateParser();
     }
 
-    public Result<List<EmployeeBirthday>, Failure> getAll() {
-        return parseEmployes();
-    }
-
-    private Result<List<EmployeeBirthday>, Failure> parseEmployes() {
-        return stream().map(stream -> stream.collect(Collectors.toList()));
-    }
-
-    private EmployeeBirthday parseEmployee(String str) {
+    private Result<Employee, Failure> parseEmployee(String str) {
         String[] employeeData = str.split(", ");
-        try {
-            return new Employee(employeeData[1], employeeData[0], new Birthdate(employeeData[2]), employeeData[3]);
-        } catch (ParseException e) {
-            throw new RuntimeException("Error while reading employees file", e);
-        }
+        return dateParser.parse(employeeData[2])
+                .recover(failure -> Result.failure("Unable to parse emplyee birthdate"))
+                .map(date -> employeeFactory.getInstance(employeeData[1], employeeData[0], date, employeeData[3])).get();
     }
 
-    public Result<Stream<EmployeeBirthday>, Failure> stream() {
+    public Stream<Employee> stream() {
         try {
             Path path = Paths.get(fileName);
-            return Result.success(
-                    Files.lines(path)
+            return Files.lines(path)
                     .skip(1)
                     .map(this::parseEmployee)
-            );
+                    .filter(Result::isSuccess)
+                    .map(Result::getValue)
+                    .map(Optional::get);
         } catch (IOException e) {
-            return Result.failure(new FileReadingFailure(e.getMessage()));
+            return Stream.empty();
         }
     }
 }

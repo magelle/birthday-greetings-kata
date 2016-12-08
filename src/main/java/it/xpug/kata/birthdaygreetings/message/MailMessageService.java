@@ -1,6 +1,6 @@
 package it.xpug.kata.birthdaygreetings.message;
 
-import it.xpug.kata.birthdaygreetings.birthday.EmployeeBirthday;
+import it.xpug.kata.birthdaygreetings.birthday.Employee;
 import it.xpug.kata.birthdaygreetings.birthday.Failure;
 import it.xpug.kata.birthdaygreetings.birthday.MessageService;
 import it.xpug.kata.birthdaygreetings.message.mail.MailService;
@@ -14,7 +14,7 @@ public class MailMessageService implements MessageService {
         this.mailService = mailService;
     }
 
-    public void sendBirthdayGreetings(EmployeeBirthday employeeBirthday) {
+    public void sendBirthdayGreetings(Employee employeeBirthday) {
         sendMessage(new GreetingsMail(employeeBirthday));
     }
 

@@ -2,28 +2,23 @@ package it.xpug.kata.birthdaygreetings.birthday;
 
 import it.xpug.kata.birthdaygreetings.failure.FailureHandler;
 
-import java.util.stream.Stream;
+import java.time.LocalDate;
 
 public class BirthdayGreetings {
 
     private final MessageService messageService;
+    private final BirthdayComparator birthdayComparator;
     private FailureHandler failureHandler;
 
     public BirthdayGreetings(MessageService messageService, FailureHandler failureHandler) {
         this.messageService = messageService;
         this.failureHandler = failureHandler;
+        birthdayComparator = new BirthdayComparator();
     }
 
-    public void sendGreetings(EmployeeCatalog employeeCatalog, Birthdate birthdate) {
+    public void sendGreetings(EmployeeCatalog employeeCatalog, LocalDate date) {
         employeeCatalog.stream()
-                .handle(
-                        stream -> sendGreetings(birthdate, stream),
-                        failureHandler::handleFailure
-                );
-    }
-
-    private void sendGreetings(Birthdate birthdate, Stream<EmployeeBirthday> stream) {
-        stream.filter(employeeBirthday -> employeeBirthday.isBirthday(birthdate))
+                .filter(employee -> birthdayComparator.isEmployeeBirthday(employee, date))
                 .forEach(messageService::sendBirthdayGreetings);
     }
 
