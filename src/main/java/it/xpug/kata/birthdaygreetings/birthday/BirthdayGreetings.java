@@ -1,24 +1,22 @@
 package it.xpug.kata.birthdaygreetings.birthday;
 
-import it.xpug.kata.birthdaygreetings.failure.FailureHandler;
-
 import java.time.LocalDate;
+import java.util.function.Predicate;
 
 public class BirthdayGreetings {
 
     private final MessageService messageService;
     private final BirthdayComparator birthdayComparator;
-    private FailureHandler failureHandler;
 
-    public BirthdayGreetings(MessageService messageService, FailureHandler failureHandler) {
+    public BirthdayGreetings(MessageService messageService) {
         this.messageService = messageService;
-        this.failureHandler = failureHandler;
         birthdayComparator = new BirthdayComparator();
     }
 
     public void sendGreetings(EmployeeCatalog employeeCatalog, LocalDate date) {
+        Predicate<Employee> isEmployeeBirthday = birthdayComparator.isEmployeeBirthday(date);
         employeeCatalog.stream()
-                .filter(employee -> birthdayComparator.isEmployeeBirthday(employee, date))
+                .filter(isEmployeeBirthday)
                 .forEach(messageService::sendBirthdayGreetings);
     }
 

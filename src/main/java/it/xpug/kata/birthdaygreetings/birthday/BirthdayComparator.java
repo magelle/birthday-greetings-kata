@@ -1,15 +1,16 @@
 package it.xpug.kata.birthdaygreetings.birthday;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoField;
+import java.util.function.Predicate;
 
 public class BirthdayComparator {
+    private final DateUtils dateUtils = new DateUtils();
+
     public BirthdayComparator() {
     }
 
-    boolean isEmployeeBirthday(Employee employee, LocalDate date) {
-        LocalDate birthdate = employee.getBirthday();
-        return birthdate.get(ChronoField.MONTH_OF_YEAR) == date.get(ChronoField.MONTH_OF_YEAR)
-                && birthdate.get(ChronoField.DAY_OF_MONTH) == date.get(ChronoField.DAY_OF_MONTH);
+    Predicate<Employee> isEmployeeBirthday(LocalDate date) {
+        Predicate<LocalDate> isSameDayFct = dateUtils.isSameDay(date);
+        return (Employee employee) -> isSameDayFct.test(employee.getBirthday());
     }
 }
